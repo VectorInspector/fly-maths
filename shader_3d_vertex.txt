@@ -1,0 +1,36 @@
+#version 420 core
+#extension GL_ARB_explicit_uniform_location : enable
+
+layout (location = 0) in vec3 attr_position;
+layout (location = 1) in vec2 attr_uv;
+
+layout (location = 0) uniform vec3 view_pos;
+layout (location = 1) uniform mat3x3 view_mat;
+layout (location = 2) uniform vec3 model_pos;
+layout (location = 3) uniform float model_scale;
+
+out vec3 shared_position;
+out vec2 shared_uv;
+
+const float near_f = 4.0 / 65535;
+
+void main () {
+	vec3 pos = attr_position;
+	// pos.z = pos.x * pos.y / 100;
+	
+	vec3 diff = (model_pos + model_scale * pos) - view_pos;
+	vec3 eye_pos = view_mat * diff;
+	
+	// vec3 eye_pos = mat3x3(vec3(1, 0, 0), vec3(0, 1, 0), vec3(0, 0, 1)) * diff;
+	gl_Position.xy = eye_pos.yz;
+	gl_Position.z = eye_pos.x / model_scale;
+	gl_Position.w = eye_pos.x;
+	
+	// gl_Position.z = -model_scale * near_f;
+	
+	// gl_Position.xyz = attr_position;
+	// gl_Position.w = 1;
+	
+	shared_uv = attr_uv;
+	shared_position = attr_position;
+}

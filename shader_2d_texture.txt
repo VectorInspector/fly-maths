@@ -1,0 +1,12 @@
+#version 420 core
+
+out vec4 out_color;
+in vec2 shared_position;
+in vec2 shared_uv;
+
+uniform sampler2D tex;
+
+void main () {
+	out_color = vec4(1, 0, 0, 1);
+	out_color = texture(tex, shared_position);
+}

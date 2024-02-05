@@ -1,0 +1,16 @@
+#version 420 core
+#extension GL_ARB_explicit_uniform_location : enable
+
+layout (location = 0) in vec2 attr_position;
+layout (location = 1) in vec2 attr_uv;
+
+out vec2 shared_position;
+out vec2 shared_uv;
+
+void main () {
+	gl_Position.xy = attr_position;
+	gl_Position.zw = vec2(1, 1);
+	
+	shared_uv = attr_uv;
+	shared_position = attr_position;
+}
